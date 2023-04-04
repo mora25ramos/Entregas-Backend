@@ -1,22 +1,4 @@
-import mongoose from 'mongoose';
-
-const { Schema } = mongoose;
-
-const carritoSchema = new Schema({
-  timestamp: { type: Date, default: Date.now },
-  products: [{ 
-    _id: String, 
-    timestamp: Number, 
-    nombre: String, 
-    descripcion: String, 
-    codigo: String, 
-    foto: String, 
-    precio: Number, 
-    stock: Number 
-  }]
-});
-
-const Carrito = mongoose.model('Carrito', carritoSchema);
+import { Carrito } from '../models/Carrito.js'
 
 export default class CarritoDAO {
   constructor() {
@@ -52,7 +34,7 @@ export default class CarritoDAO {
           products: [producto]
         });
       }
-      return await carrito.save();
+      return await Carrito.save();
     } catch (error) {
       console.error(error);
       throw new Error('Error al guardar carrito');
