@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Real Time Products</title>
+</head>
+<body>
+    <h1>Real Time Products</h1>
+    {{#each products}}
+        <p>{{this.title}} - ${{this.price}}</p>
+    {{/each}}
+    <form id="add-product-form">
+        <h2>Add Product</h2>
+        <input type="text" id="title-input" placeholder="Title">
+        <input type="text" id="price-input" placeholder="Price">
+        <button type="submit">Add</button>
+    </form>
+    <form id="delete-product-form">
+        <h2>Delete Product</h2>
+        <select id="delete-product-select">
+            {{#each products}}
+                <option value="{{this.id}}">{{this.title}} - ${{this.price}}</option>
+            {{/each}}
+        </select>
+        <button type="submit">Delete</button>
+    </form>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/public/index.js"></script>
+</html>

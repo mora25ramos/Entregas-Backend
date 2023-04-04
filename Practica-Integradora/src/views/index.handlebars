@@ -1,0 +1,12 @@
+{{#extend "layouts/main"}}
+  {{#section "title"}}E-commerce{{/section}}
+  {{#section "content"}}
+    <h1>Bienvenido a E-commerce</h1>
+    <ul>
+    {{#each productos}}
+      <li>{{this.nombre}}</li>
+    {{/each}}
+    </ul>
+    <a href="/productos">Ver más productos</a>
+  {{/section}}
+{{/extend}}
