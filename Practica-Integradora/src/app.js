@@ -7,7 +7,7 @@ import productsRouter from './routes/api/products.router.js';
 import carritoRouter from './routes/api/carrito.router.js';
 import viewsRouter from './routes/web/views.router.js';
 import  __dirname from './utils.js';
-import { Message } from './dao/models/Message.js';
+import MessageDAO from './dao/mongoDB/MessageDAO.js';
 
 const app = express();
 
@@ -50,14 +50,14 @@ io.on('connection', (socket) => {
   console.log(`Cliente conectado: ${socket.id}`);
 
   // Envío de mensajes al cliente
-  const messages = Message.find();
+  const messages = MessageDAO.find();
   socket.emit('messages', messages);
 
   // Recepción de mensajes del cliente
   socket.on('new-message', async (data) => {
     console.log(data);
-    Message.create(data);
-    const messages =  Message.find();
+    MessageDAO.create(data);
+    const messages =  MessageDAO.find();
     io.sockets.emit('messages', messages);
   });
 });
