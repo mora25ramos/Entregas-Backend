@@ -1,12 +1,4 @@
-import mongoose from 'mongoose';
-
-const messageSchema = new mongoose.Schema({
-  email: { type: String, required: true, max: 100 },
-  timestamp: { type: String, required: true, max: 100 },
-  message: { type: String, required: true, max: 500 },
-});
-
-const Message = mongoose.model('messages', messageSchema);
+import Message from '../models/Message.js'
 
 export default class MessageDAO {
   static async add(message) {
