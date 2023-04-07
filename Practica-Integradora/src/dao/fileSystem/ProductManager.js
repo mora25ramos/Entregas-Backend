@@ -17,7 +17,7 @@ class ProductManager {
 
   async getAll() {
     try {
-      const file = await fs.promises.readFile(filePath, 'utf-8');
+      const file = await fs.promises.readFile(this.filePath, 'utf-8');
       return JSON.parse(file);
     } catch (error) {
       await this.save([]);

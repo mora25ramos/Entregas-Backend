@@ -1,8 +1,10 @@
 {{#extend "layouts/main"}}
-  {{#section "title"}}E-commerce - Productos en tiempo real{{/section}}
+  {{#section "title"}}E-commerce{{/section}}
   {{#section "content"}}
     <h1>Productos en tiempo real</h1>
-    <div id="container"></div>
+    <div id="container">
+      <ul id="lista-productos"></ul>
+    </div>
   {{/section}}
   {{#section "scripts"}}
     <script src="/socket.io/socket.io.js"></script>
@@ -20,3 +22,4 @@
     </script>
   {{/section}}
 {{/extend}}
+

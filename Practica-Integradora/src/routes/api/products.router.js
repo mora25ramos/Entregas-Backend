@@ -17,14 +17,26 @@ productsRouter.get("/:id", async (req, res) => {
 });
 
 productsRouter.post("/", async (req, res) => {
-  await productManager.save(re.body);
-
-  const io = req.app.get('socketio');
-  io.emit("showProducts", await productManager.getAll());
-
-  res.send ({
-    status: 'success'
-  })
+  try {
+    const { nombre, descripcion, codigo, foto, precio, stock } = req.body;
+    const producto = {
+      nombre,
+      descripcion,
+      codigo,
+      foto,
+      precio,
+      stock,
+    };
+    const savedProduct = await productManager.save(producto);
+    
+    const io = req.app.get('socketio');
+    io.emit("showProducts", await productManager.getAll());
+    
+    res.status(201).json(savedProduct);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Hubo un error al crear el producto.");
+  }
 });
 
 productsRouter.put("/:id", async (req, res) => {
@@ -43,8 +55,13 @@ productsRouter.put("/:id", async (req, res) => {
 });
 
 productsRouter.delete("/:pid", async (req, res) => {
-  const producto = await productManager.deleteById(id);
-  res.json(producto);
+  const id = req.params.pid;
+  const deletedProduct = await productManager.deleteById(id);
+  
+  const io = req.app.get('socketio');
+  io.emit("showProducts", await productManager.getAll());
+  
+  res.json(deletedProduct);
 });
 
 export default productsRouter;

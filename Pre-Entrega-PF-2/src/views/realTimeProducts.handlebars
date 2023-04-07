@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Productos en tiempo real - Mi tienda en línea</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    {{> layouts/main}}
+
+    <div class="container">
+        <h1>Productos en tiempo real</h1>
+        <ul class="product-list"></ul>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/realTimeProducts.js"></script>
+</body>
+</html>

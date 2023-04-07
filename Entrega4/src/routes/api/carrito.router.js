@@ -2,7 +2,7 @@ import { Router } from 'express';
 import path from 'path';
 import CarritoManager from '../../manager/CarritoManager.js';
 
-const carritoRouter = Router();
+const carritoRouter = Router(); 
 
 // Ruta para crear un nuevo carrito
 carritoRouter.post('/', async (req, res) => {

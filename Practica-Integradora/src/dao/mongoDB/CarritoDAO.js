@@ -34,12 +34,13 @@ export default class CarritoDAO {
           products: [producto]
         });
       }
-      return await Carrito.save();
+      return await carrito.save(); 
     } catch (error) {
       console.error(error);
       throw new Error('Error al guardar carrito');
     }
   }
+  
 
   async delete(id) {
     try {

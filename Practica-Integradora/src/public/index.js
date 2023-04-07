@@ -11,20 +11,20 @@ socket.on('disconnect', () => {
 const container = document.getElementById('container')
 
 socket.on('showProducts', (data) => {
-  container.innerHTML = ``
+  container.innerHTML = ''
 
-  data.forEach(product =>{
-    container.innerHTML += `
-      <ul>
-        <li>title:${product.title}</li>
-        <li>description:${product.description}</li>
-        <li>code:${product.code}</li>
-        <li>price:${product.price}</li>
-        <li>status:${product.status}</li>
-        <li>stock:${product.stock}</li>
-        <li>category:${product.category}</li>}
-        <li>id:${product.id}</li>
-      </ul>
+  data.forEach(product => {
+    const ul = document.createElement('ul')
+    ul.innerHTML = `
+      <li>title: ${product.title}</li>
+      <li>description: ${product.description}</li>
+      <li>code: ${product.code}</li>
+      <li>price: ${product.price}</li>
+      <li>status: ${product.status}</li>
+      <li>stock: ${product.stock}</li>
+      <li>category: ${product.category}</li>
+      <li>id: ${product.id}</li>
     `
+    container.appendChild(ul)
   })
 })

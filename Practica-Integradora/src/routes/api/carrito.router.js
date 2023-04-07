@@ -8,7 +8,7 @@ const carrito = new CarritoManager();
 carritoRouter.get('/:cid', async (req, res) => {
   try {
     const { cid } = req.params;
-    const cart = await CarritoManager.getById(cid);
+    const cart = await carrito.getById(cid);
     if (!cart) {
       return res.status(404).send('No se encontró el carrito solicitado.');
     }

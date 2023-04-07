@@ -1,9 +1,10 @@
-const express = require('express');
-const app = express();
-const productsRouter = require('./routes/products.router.js');
-const cartsRouter = require('./routes/carrito.router.js');
+import express from 'express';
+import __dirname from './utils.js'
+import productsRouter from './routes/products.router.js';
+import cartsRouter from './routes/carrito.router.js';
 
-// Parse application/json and application/x-www-form-urlencoded
+const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

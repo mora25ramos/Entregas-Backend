@@ -8,7 +8,7 @@ const carritoManager = new CarritoManager()
 
 viewsRouter.get("/", async (req, res) => {
   try {
-    res.render('realTimeProducts', { products: productManager.getAll });
+    res.render('realTimeProducts', { products: await productManager.getAll() });
   } catch (error) {
     console.error(error);
     res.status(500).send("Hubo un error al cargar los productos");

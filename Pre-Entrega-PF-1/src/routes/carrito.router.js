@@ -1,40 +1,42 @@
-const express = require('express');
-const CarritoManager = require('../manager/CarritoManager');
-const ProductManager = require('../manager/ProductManager');
+import express from 'express';
+import CarritoManager from '../manager/CarritoManager.js';
 
 const router = express.Router();
 
+// Obtener todos los productos del carrito
+router.get('/', (req, res) => {
+  const carrito = new CarritoManager();
+  const productos = carrito.getProductos();
+  res.json(productos);
+});
+
+// Obtener un producto del carrito por id
+router.get('/:id', (req, res) => {
+  const carrito = new CarritoManager();
+  const id = req.params.id;
+  const producto = carrito.getProductosPorId(id);
+  if (producto) {
+    res.json(producto);
+  } else {
+    res.status(404).json({ error: 'Producto no encontrado en el carrito' });
+  }
+});
+
+// Agregar un producto al carrito
 router.post('/', (req, res) => {
-  const newCart = CarritoManager.createCart();
-  res.json(newCart);
+  const carrito = new CarritoManager();
+  const { id, title, description, code, thumbnail, price, status, stock } = req.body;
+  const product = { id, status, title, description, code, thumbnail, price, stock };
+  carrito.add(product);
+  res.json({ mensaje: 'Producto agregado al carrito' });
 });
 
-router.get('/:cid', (req, res) => {
-  const cartId = req.params.cid;
-  const cart = CarritoManager.getCartById(cartId);
-  if (!cart) {
-    res.status(404).send(`Cart with id ${cartId} not found`);
-  } else {
-    res.json(cart);
-  }
+// Eliminar un producto del carrito por id
+router.delete('/:id', (req, res) => {
+  const carrito = new CarritoManager();
+  const id = req.params.id;
+  carrito.eliminarProducto(id);
+  res.json({ mensaje: 'Producto eliminado del carrito' });
 });
 
-router.post('/:cid/product/:pid', (req, res) => {
-  const cartId = req.params.cid;
-  const productId = req.params.pid;
-  const product = ProductManager.getProductById(productId);
-
-  if (!product) {
-    res.status(404).send(`Product with id ${productId} not found`);
-  } else {
-    try {
-      const newProduct = CarritoManager.addProductToCart(cartId, product);
-      res.json(newProduct);
-    } catch (error) {
-      res.status(500).send(error.message);
-    }
-  }
-});
-
-module.exports = router;
-``
+export default router;

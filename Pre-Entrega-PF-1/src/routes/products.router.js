@@ -1,75 +1,52 @@
-const express = require('express');
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
-const ProductManager = require('../manager/ProductManager.js');
-
+import express from 'express';
 const router = express.Router();
+import ProductManager from '../manager/ProductManager.js';
 
-const productsFilePath = path.join(__dirname, '..', 'files', 'Products.json');
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '..', 'public', 'img'));
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now());
-  }
-});
-const upload = multer({ storage: storage });
+const productManager = new ProductManager();
 
 router.get('/', (req, res) => {
-  const products = ProductManager.getProducts();
+  const products = productManager.getProducts();
   res.json(products);
 });
 
 router.get('/:pid', (req, res) => {
-  const productId = req.params.pid;
-  const product = ProductManager.getProductById(productId);
-  if (!product) {
-    res.status(404).send(`Product with id ${productId} not found`);
-  } else {
+  const product = productManager.getProductById(req.params.pid);
+  if (product) {
     res.json(product);
+  } else {
+    res.status(404).json({ error: 'Product not found' });
   }
 });
 
-router.post('/', upload.array('thumbnails', 4), (req, res) => {
-  const productData = req.body;
-  const thumbnails = req.files.map(file => `/img/${file.filename}`);
-  productData.thumbnails = thumbnails;
-
-  try {
-    const newProduct = ProductManager.addProduct(productData);
-    res.json(newProduct);
-  } catch (error) {
-    res.status(500).send(error.message);
+router.post('/', (req, res) => {
+  const { title, description, code, price, status, stock, category, thumbnail } = req.body;
+  if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail) {
+    return res.status(400).json({ error: 'Missing fields' });
   }
+  const product = productManager.addProduct(title, description, code, price, status, stock, category, thumbnail);
+  res.status(201).json(product);
 });
 
 router.put('/:pid', (req, res) => {
-  const productId = req.params.pid;
-  const productData = req.body;
-
-  try {
-    const updatedProduct = ProductManager.updateProduct(productId, productData);
-    if (!updatedProduct) {
-      res.status(404).send(`Product with id ${productId} not found`);
-    } else {
-      res.json(updatedProduct);
-    }
-  } catch (error) {
-    res.status(500).send(error.message);
+  const { title, description, code, price, status, stock, category, thumbnail } = req.body;
+  if (!title || !description || !code || !price || !status || !stock || !category || !thumbnail) {
+    return res.status(400).json({ error: 'Missing fields' });
+  }
+  const updatedProduct = productManager.updateProduct(req.params.pid, title, description, code, price, status, stock, category, thumbnail);
+  if (updatedProduct) {
+    res.json(updatedProduct);
+  } else {
+    res.status(404).json({ error: 'Product not found' });
   }
 });
 
 router.delete('/:pid', (req, res) => {
-  const productId = req.params.pid;
-
-  try {
-    ProductManager.deleteProduct(productId);
-    res.sendStatus(204);
-  } catch (error) {
-    res.status(500).send(error.message);
+  const deletedProduct = productManager.deleteProduct(req.params.pid);
+  if (deletedProduct) {
+    res.json(deletedProduct);
+  } else {
+    res.status(404).json({ error: 'Product not found' });
   }
 });
 
-module.exports = router;
+export default router;
