@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Ecommerce con sistema de login</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          {{#if isAuthenticated}}
+          <li><a href="/carrito">Carrito</a></li>
+          <li><a href="/logout">Cerrar sesión</a></li>
+          {{else}}
+          <li><a href="/login">Iniciar sesión</a></li>
+          <li><a href="/registro">Registrarse</a></li>
+          {{/if}}
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section>
+        <h1>Bienvenido a nuestro Ecommerce</h1>
+        {{#if isAuthenticated}}
+        <p>¡Hola {{username}}! Bienvenido de nuevo a nuestro sitio.</p>
+        {{else}}
+        <p>Regístrate o inicia sesión para comenzar a comprar.</p>
+        {{/if}}
+      </section>
+      <section id="productos">
+        <h2>Productos destacados</h2>
+        <div class="products-container">
+          {{#each products}}
+          <div class="product-card">
+            <img src="{{this.image}}" alt="{{this.name}}" />
+            <h3>{{this.name}}</h3>
+            <p class="price">${{this.price}}</p>
+            <a href="/producto/{{this._id}}">Ver producto</a>
+          </div>
+          {{/each}}
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

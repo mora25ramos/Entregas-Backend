@@ -1,0 +1,29 @@
+{{> main}}
+
+{{#if user}}
+  <div class="add-product-container">
+    <a href="/products/new" class="add-product-link">Agregar producto</a>
+  </div>
+{{/if}}
+
+{{#each products}}
+  <div class="product-card">
+    <div class="product-img-container">
+      <img src="{{this.image}}" alt="Imagen de {{this.name}}" class="product-img">
+    </div>
+    <div class="product-info">
+      <h3 class="product-name">{{this.name}}</h3>
+      <p class="product-description">{{this.description}}</p>
+      <p class="product-price">{{this.price}} €</p>
+      <div class="product-btn-container">
+        <a href="/products/{{this._id}}" class="product-btn">Ver detalle</a>
+        {{#if user}}
+          <form action="/carrito/{{this._id}}" method="POST" class="add-to-cart-form">
+            <input type="number" name="quantity" value="1" min="1" max="{{this.stock}}" class="product-quantity">
+            <button type="submit" class="product-btn add-to-cart-btn">Agregar al carrito</button>
+          </form>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+{{/each}}

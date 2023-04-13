@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Carrito de compras</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/products">Productos</a></li>
+        <li><a href="/carrito">Carrito</a></li>
+        {{#if user}}
+        <li><a href="/logout">Cerrar sesión</a></li>
+        {{else}}
+        <li><a href="/login">Iniciar sesión</a></li>
+        {{/if}}
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Carrito de compras</h1>
+    {{#if products.length}}
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each products}}
+        <tr>
+          <td>{{this.title}}</td>
+          <td>{{this.cantidad}}</td>
+          <td>{{this.price}} USD</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <p>Total: {{total}} USD</p>
+    <a href="/checkout" class="btn">Realizar pago</a>
+    {{else}}
+    <p>No hay productos en el carrito</p>
+    {{/if}}
+  </main>
+
+  <footer>
+    <p>Este es el footer</p>
+  </footer>
+</body>
+
+</html>
