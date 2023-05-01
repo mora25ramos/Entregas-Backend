@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil de usuario</title>
+</head>
+<body>
+  <h1>Bienvenido {{user.name}}!</h1>
+  <p>Nombre: {{user.name}}</p>
+  <p>Correo electrónico: {{user.email}}</p>
+  <form action="/users/logout" method="post">
+    <button type="submit">Cerrar sesión</button>
+  </form>
+</body>
+</html>

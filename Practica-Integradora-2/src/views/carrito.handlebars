@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Carrito de compras</title>
+  </head>
+  <body>
+    <h1>Carrito</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each carrito.productos}}
+          <tr>
+            <td>{{this.nombre}}</td>
+            <td>{{this.precio}}</td>
+            <td>{{this.cantidad}}</td>
+            <td>{{this.total}}</td>
+            <td>
+              <button onclick="eliminarProducto({{this.id}})">Eliminar</button>
+              <button onclick="incrementarCantidad({{this.id}})">+</button>
+              <button onclick="decrementarCantidad({{this.id}})">-</button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <p>Total: {{carrito.total}}</p>
+    <a href="/productos">Seguir comprando</a>
+    <form action="/carrito/checkout" method="post">
+      <button type="submit">Realizar compra</button>
+    </form>
+  </body>
+</html>
