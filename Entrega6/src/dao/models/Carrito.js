@@ -15,8 +15,8 @@ class Carrito {
     this.save();
   }
 
-  generateId() {
-    return crypto.randomBytes(16).toString("hex");
+  generarId() {
+    return Math.random().toString(36).substr(2, 9);
   }
 
   save() {

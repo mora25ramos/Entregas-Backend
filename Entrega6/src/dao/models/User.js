@@ -1,8 +1,37 @@
-export class User {
-    constructor(nombre, email, contrasena, rol) {
-      this.nombre = nombre;
-      this.email = email;
-      this.contrasena = contrasena;
-      this.rol = rol || 'user';
-    }
-};  
+import mongoose from 'mongoose';
+
+const userSchema = new mongoose.Schema({
+  first_name: {
+    type: String,
+    required: true,
+  },
+  last_name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  age: {
+    type: Number,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  cart: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Cart',
+  },
+  role: {
+    type: String,
+    default: 'user',
+  },
+});
+
+const User = mongoose.model('User', userSchema);
+
+export default User;

@@ -1,34 +1,29 @@
-import jwt from "jsonwebtoken";
-import { getDB } from "../db/db.js";
+import passport from "passport";
+import passportJWT from "passport-jwt";
+import config from "../config.js";
+import User from "../dao/models/User.js";
 
-export const authMiddleware = async (req, res, next) => {
-  try {
-    const token = req.header("Authorization").replace("Bearer ", "");
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const _id = decoded?._id;
-    const db = getDB();
-    const user = await db.collection("users").findOne({ _id, "tokens.token": token });
-    if (!user) {
-      throw new Error();
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
+
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: config.jwtSecret,
+    },
+    async (jwtPayload, done) => {
+      try {
+        const user = await User.findById(jwtPayload._id);
+        if (!user) {
+          return done(null, false);
+        }
+        return done(null, user);
+      } catch (error) {
+        return done(error, false);
+      }
     }
-    req.token = token;
-    req.user = user;
-    next();
-  } catch (e) {
-    res.status(401).send({ error: "Please authenticate." });
-  }
-};
+  )
+);
 
-export const isAdmin = async (req, res, next) => {
-  try {
-    const user = req.user;
-    if (user && user.admin) {
-      next();
-    } else {
-      throw new Error();
-    }
-  } catch (e) {
-    res.status(403).send({ error: "You are not authorized to access this resource." });
-  }
-};
-
+export const authenticateJWT = passport.authenticate("jwt", { session: false });

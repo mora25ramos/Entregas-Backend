@@ -10,11 +10,11 @@ class CarritoDAO {
     const options = { upsert: true, returnOriginal: false };
     try {
       const resultado = await getDB().collection('carritos').findOneAndUpdate(query, update, options);
-      return resultado.value;
+      return resultado.value.productos || [];
     } catch (error) {
       console.error('Error al agregar producto al carrito: ', error);
     }
-  }
+  }  
 
   static async listarProductos(idUsuario) {
     const query = { usuario_id: idUsuario };

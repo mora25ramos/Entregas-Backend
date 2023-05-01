@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { getDB } from "../../db/db.js";
 import { Product } from "../models/Product.js";
 
@@ -30,7 +31,7 @@ class ProductDAO {
   async getProductById(id) {
     try {
       const db = await getDB();
-      const product = await db.collection("productos").findOne({ _id: id });
+      const product = await db.collection("productos").findOne({ _id: ObjectId(id) });
       if (product) {
         const { _id: id, ...productWithoutId } = product;
         return new Product(id, productWithoutId.title, productWithoutId.price, productWithoutId.thumbnail);
