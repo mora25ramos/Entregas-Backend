@@ -21,6 +21,9 @@ import carritoRouter from './routes/api/carrito.router.js';
 import usersRouter from './routes/api/users.router.js';
 import indexRouter from "./routes/web/index.router.js";
 import loginRouter from './routes/web/login.router.js';
+import { userService } from './src/services/userService.js';
+import { productService } from './src/services/productService.js';
+import { carritoService } from './src/services/carritoService.js'
 
 
 // Definición de constantes y variables
@@ -64,10 +67,13 @@ app.use(passport.session());
 
 // Configuración de rutas
 app.use('/', indexRouter);
-app.use('/api', productsRouter);
-app.use('/api', carritoRouter);
+app.use('/products', productsRouter);
+app.use('/cart', carritoRouter);
 app.use('/login', loginRouter);
 app.use('/users', authMiddleware, usersRouter);
+app.use('/users', userService);
+app.use('/products', productService);
+app.use('/cart', carritoService);
 
 // Manejar errores
 app.use((err, req, res, next) => {

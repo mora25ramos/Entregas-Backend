@@ -10,7 +10,7 @@ export async function createUser(userInfo) {
   }
 }
 
-export async function getUser(email) {
+export async function getUserByEmail(email) {
   try {
     const user = await userDAO.getUser(email);
     return user;

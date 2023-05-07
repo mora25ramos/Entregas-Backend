@@ -26,7 +26,7 @@ export default class userDAO {
     }
   }
 
-  static async getUser(email) {
+  static async getUserByEmail(email) {
     try {
       const user = await users.findOne({ email: email });
       return user;

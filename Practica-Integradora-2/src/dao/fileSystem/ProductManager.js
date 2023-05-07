@@ -1,4 +1,3 @@
-// product.controller.js
 import ProductDAO from '../dao/mongoDB/productDAO.js';
 
 class ProductManager {
