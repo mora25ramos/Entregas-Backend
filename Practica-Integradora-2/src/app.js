@@ -1,5 +1,5 @@
 import express from 'express';
-import handlebars from 'express-handlebars';
+import handlebars from 'express-handlebars'; 
 import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io';

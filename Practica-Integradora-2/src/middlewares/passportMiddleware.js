@@ -1,5 +1,3 @@
-// middlewares/passportMiddleware.js
-
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import JWTStrategy from 'passport-jwt';
