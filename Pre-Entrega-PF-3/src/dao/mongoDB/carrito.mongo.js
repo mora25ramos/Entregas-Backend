@@ -1,6 +1,16 @@
 import { getDB } from '../../db/db.js';
 
-class CarritoDAO {
+export default class CarritoDAO {
+  static async create(carrito) {
+    try {
+      const db = getDB();
+      const result = await db.collection('carritos').insertOne(carrito);
+      return result.insertedId;
+    } catch (error) {
+      console.error('Error occurred while creating a new cart:', error);
+    }
+  }
+
   static async save(cart, userId) {
     try {
       const db = getDB();
@@ -17,7 +27,17 @@ class CarritoDAO {
     }
   }
 
-  static async findByUserId(userId) {
+  static async getAll() {
+    try {
+      const db = getDB();
+      const carritos = await db.collection('carritos').find().toArray();
+      return carritos;
+    } catch (error) {
+      console.error('Error occurred while retrieving carts:', error);
+    }
+  }
+
+  static async getById(userId) {
     try {
       const db = getDB();
       const result = await db.collection('cart').findOne({ userId: userId });
@@ -27,7 +47,7 @@ class CarritoDAO {
     }
   }
 
-  static async deleteByUserId(userId) {
+  static async deleteById(userId) {
     try {
       const db = getDB();
       await db.collection('cart').deleteOne({ userId: userId });
@@ -36,5 +56,3 @@ class CarritoDAO {
     }
   }
 }
-
-export default CarritoDAO;

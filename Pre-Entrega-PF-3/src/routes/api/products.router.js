@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { authMiddleware, restrictTo } from '../../middlewares/authMiddleware.js';
+import authMiddleware from '../../middlewares/authMiddleware.js';
+import adminMiddleware from '../../middlewares/authMiddleware.js';
 import ProductRepository from '../../repositories/ProductRepository.js';
 
 const productsRouter = Router();
@@ -31,7 +32,7 @@ productsRouter.get('/:id', async (req, res) => {
 });
 
 // Crear un nuevo producto (solo para administradores)
-productsRouter.post('/', authMiddleware, restrictTo('admin'), async (req, res) => {
+productsRouter.post('/', authMiddleware, adminMiddleware('admin'), async (req, res) => {
   const productData = req.body;
   try {
     const createdProduct = await ProductRepository.addProduct(productData);
@@ -43,7 +44,7 @@ productsRouter.post('/', authMiddleware, restrictTo('admin'), async (req, res) =
 });
 
 // Actualizar un producto (solo para administradores)
-productsRouter.put('/:id', authMiddleware, restrictTo('admin'), async (req, res) => {
+productsRouter.put('/:id', authMiddleware, adminMiddleware('admin'), async (req, res) => {
   const { id } = req.params;
   const productData = req.body;
   try {
@@ -59,7 +60,7 @@ productsRouter.put('/:id', authMiddleware, restrictTo('admin'), async (req, res)
 });
 
 // Eliminar un producto (solo para administradores)
-productsRouter.delete('/:id', authMiddleware, restrictTo('admin'), async (req, res) => {
+productsRouter.delete('/:id', authMiddleware, adminMiddleware('admin'), async (req, res) => {
   const { id } = req.params;
   try {
     const deletedProduct = await ProductRepository.deleteProduct(id);

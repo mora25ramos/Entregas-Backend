@@ -1,4 +1,4 @@
-import ProductDAO from '../dao/mongoDB/productDAO.js';
+import ProductDAO from '../dao/mongoDB/product.mongo.js';
 
 export const createProduct = async (productData) => {
   const newProduct = await ProductDAO.create(productData);
@@ -22,4 +22,12 @@ export const updateProduct = async (productId, productData) => {
 
 export const deleteProduct = async (productId) => {
   await ProductDAO.deleteProduct(productId);
+};
+
+export default {
+  createProduct,
+  getProducts,
+  getProductById,
+  updateProduct,
+  deleteProduct
 };

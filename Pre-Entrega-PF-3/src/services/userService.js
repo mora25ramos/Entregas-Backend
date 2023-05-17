@@ -1,4 +1,7 @@
-import { createUser, getUserByEmail, getUserById, updateUser } from '../dao/mongoDB/userDAO.js';
+import create from '../dao/mongoDB/user.mongo.js';
+import getUserByEmail from '../dao/mongoDB/user.mongo.js';
+import getUserById from '../dao/mongoDB/user.mongo.js';
+import update from '../dao/mongoDB/user.mongo.js';
 import User from '../dao/models/User.js';
 import bcrypt from 'bcrypt';
 
@@ -24,7 +27,7 @@ export const createUserService = async (userData) => {
       password: hashedPassword,
     });
 
-    const result = await createUser(newUser);
+    const result = await create(newUser);
     return result;
   } catch (error) {
     console.error(error);
@@ -62,10 +65,16 @@ export const updateUserService = async (userId, userData) => {
       password: hashedPassword,
     };
 
-    const result = await updateUser(userId, updatedUserData);
+    const result = await update(userId, updatedUserData);
     return result;
   } catch (error) {
     console.error(error);
     throw new Error('Could not update user');
   }
+};
+
+export default {
+  createUserService,
+  getUserByIdService,
+  updateUserService
 };

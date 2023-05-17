@@ -1,11 +1,11 @@
-import ProductRepository from '../repositories/ProductRepository.js';
-import ProductDTO from '../dto/ProductDTO.js';
+import ProductRepository from '../../repositories/ProductRepository.js';
+import { ProductoDTO } from '../../dto/productDTO.js';
 
 class ProductManager {
   async getAllProducts() {
     try {
       const productsData = await ProductRepository.getAll();
-      const products = productsData.map((productData) => ProductDTO.fromData(productData));
+      const products = productsData.map((productData) => ProductoDTO.fromData(productData));
       return products;
     } catch (error) {
       throw new Error('Error getting all products');
@@ -15,7 +15,7 @@ class ProductManager {
   async getProductById(productId) {
     try {
       const productData = await ProductRepository.getById(productId);
-      const product = ProductDTO.fromData(productData);
+      const product = ProductoDTO.fromData(productData);
       return product;
     } catch (error) {
       throw new Error(`Error getting product with ID: ${productId}`);
@@ -25,7 +25,7 @@ class ProductManager {
   async addProduct(productData) {
     try {
       const newProductData = await ProductRepository.create(productData);
-      const newProduct = ProductDTO.fromData(newProductData);
+      const newProduct = ProductoDTO.fromData(newProductData);
       return newProduct;
     } catch (error) {
       throw new Error('Error adding product');
@@ -35,7 +35,7 @@ class ProductManager {
   async updateProduct(productId, productData) {
     try {
       const updatedProductData = await ProductRepository.update(productId, productData);
-      const updatedProduct = ProductDTO.fromData(updatedProductData);
+      const updatedProduct = ProductoDTO.fromData(updatedProductData);
       return updatedProduct;
     } catch (error) {
       throw new Error(`Error updating product with ID: ${productId}`);
@@ -45,7 +45,7 @@ class ProductManager {
   async deleteProduct(productId) {
     try {
       const deletedProductData = await ProductRepository.delete(productId);
-      const deletedProduct = ProductDTO.fromData(deletedProductData);
+      const deletedProduct = ProductoDTO.fromData(deletedProductData);
       return deletedProduct;
     } catch (error) {
       throw new Error(`Error deleting product with ID: ${productId}`);
@@ -55,7 +55,7 @@ class ProductManager {
   async checkStock(productId, quantity) {
     try {
       const productData = await ProductRepository.getById(productId);
-      const product = ProductDTO.fromData(productData);
+      const product = ProductoDTO.fromData(productData);
       if (product && product.stock >= quantity) {
         return true;
       }

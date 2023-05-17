@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import UserRepository from '../repositories/UserRepository.js';
+import UserRepository from '../../repositories/UserRepository.js';
 
 const { Schema } = mongoose;
 

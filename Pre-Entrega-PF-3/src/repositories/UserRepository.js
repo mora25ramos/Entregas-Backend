@@ -1,4 +1,4 @@
-import UserDAO from '../dao/UserDAO.js';
+import UserDAO from '../dao/mongoDB/user.mongo.js';
 import UserDTO from '../dto/UserDTO.js';
 
 class UserRepository {

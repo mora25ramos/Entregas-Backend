@@ -1,6 +1,7 @@
 import { getDB } from '../../db/db.js';
+import { getUserByIdService } from '../../services/userService.js';
 
-class UserDAO {
+export class UserDAO {
   static async create(user) {
     try {
       const db = getDB();
@@ -56,4 +57,6 @@ class UserDAO {
   }
 }
 
-export default UserDAO;
+export default{
+  create, update, getUserByEmail, getUserById
+} 

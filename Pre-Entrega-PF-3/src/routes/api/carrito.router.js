@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import { authMiddleware, adminMiddleware } from '../../middlewares/authMiddleware.js';
-import CarritoManager from '../../dao/fileSystem/CarritoManager.js';
+import authMiddleware from '../../middlewares/authMiddleware.js';
+import adminMiddleware from '../../middlewares/authMiddleware.js';
+import { CarritoManager } from '../../dao/fileSystem/CarritoManager.js';
 import UserDTO from '../../dto/UserDTO.js';
 import CartRepository from '../../repositories/CartRepository.js';
 
@@ -44,7 +45,7 @@ carritoRouter.delete('/:username/:productId', authMiddleware, async (req, res) =
 });
 
 // Obtiene la información necesaria del usuario actual
-carritoRouter.get('/current', authMiddleware, restrictTo('user'), (req, res) => {
+carritoRouter.get('/current', authMiddleware, adminMiddleware('user'), (req, res) => {
   const { username, email } = req.user;
   const userDTO = new UserDTO(username, email);
   res.json(userDTO);

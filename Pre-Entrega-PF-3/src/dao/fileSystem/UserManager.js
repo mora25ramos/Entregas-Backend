@@ -1,9 +1,9 @@
-import UserDAO from '../dao/UserDAO.js';
-import UserDTO from '../dto/UserDTO.js';
-import UserRepository from '../repositories/UserRepository.js';
+import UserDAO from '../mongoDB/user.mongo.js';
+import UserDTO from '../../dto/UserDTO.js';
+import UserRepository from '../../repositories/UserRepository.js';
 import bcrypt from 'bcrypt';
 
-class UserManager {
+export class UserManager {
     async createUser(userData) {
         try {
             const newUser = await UserRepository.create(userData);
@@ -49,7 +49,7 @@ class UserManager {
         } catch (error) {
             throw new Error(`Error deleting user with ID: ${userId}`);
         }
-    }    
+    }  
 
     async comparePasswords(password, hashedPassword) {
         try {
@@ -59,6 +59,43 @@ class UserManager {
           throw new Error('Error comparing passwords');
         }
     }
+
+    async login (email, password) {
+        try {
+          const user = await this.getUserByEmail(email);
+    
+          if (!user || !await this.comparePasswords(password, user.password)) {
+            throw new Error('Invalid email or password');
+          }
+    
+          // Generar un token de acceso
+          const token = jwt.sign({ userId: user.id }, 'secreto', { expiresIn: '1h' });
+    
+          // Acà se establece una cookie en la respuesta con el token de acceso
+          // la biblioteca cookie-parseranaliza y establece las cookies
+          res.cookie('access_token', token, { httpOnly: true, maxAge: 3600000 });
+    
+          return user;
+        } catch (error) {
+          throw new Error('Error during login');
+        }
+    }
+   
+    async logout(req, res) {
+        try {
+          // Invalidar el token de acceso
+          const token = req.cookies.access_token;
+    
+          // se elimina la cookie de acceso
+          res.clearCookie('access_token');
+          return 'Logged out successfully';
+        } catch (error) {
+          throw new Error('Error during logout');
+        }
+      }    
 }
 
-export default new UserManager();
+export default {
+    login,
+    logout
+}

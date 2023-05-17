@@ -2,14 +2,14 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import JWTStrategy from 'passport-jwt';
 import bcrypt from 'bcrypt';
-import { jwtSecret } from '../config.js';
+import JWT_SECRET from '../config.js';
 import User from '../dao/models/User.js';
 
 export default function configurePassport(app) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  passport.use(
+  passport.use( 
     'local',
     new LocalStrategy(
       {
@@ -39,7 +39,7 @@ export default function configurePassport(app) {
     new JWTStrategy(
       {
         jwtFromRequest: (req) => req.cookies.jwt,
-        secretOrKey: jwtSecret,
+        secretOrKey: JWT_SECRET,
       },
       async (jwtPayload, done) => {
         try {

@@ -1,9 +1,8 @@
-import CarritoDAO from '../dao/CarritoDAO.js';
 import ProductManager from './ProductManager.js';
-import CarritoDTO from '../dto/CarritoDTO.js';
-import CartRepository from '../repositories/CartRepository.js';
+import { CarritoDTO } from '../../dto/carritoDTO.js';
+import CartRepository from '../../repositories/CartRepository.js';
 
-class CarritoManager {
+export class CarritoManager {
   async getCarritoByUserId(userId) {
     try {
       const carritoData = await CartRepository.getCartByUserId(userId);
