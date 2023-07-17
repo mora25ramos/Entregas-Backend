@@ -1,14 +1,14 @@
 import { getDB } from '../../db/db.js';
-import { getUserByIdService } from '../../services/userService.js';
+import { getUserByIdService} from '../../services/userService.js';
 
 export class UserDAO {
-  static async create(user) {
+  static async create (user) {
     try {
       const db = getDB();
       const result = await db.collection('users').insertOne(user);
       return result.insertedId;
     } catch (error) {
-      console.error('Error occurred while creating a new user:', error);
+      console.error('Ocurrio un error al crear el nuevo usuario:', error);
     }
   }
 
@@ -18,7 +18,7 @@ export class UserDAO {
       const users = await db.collection('users').find().toArray();
       return users;
     } catch (error) {
-      console.error('Error occurred while retrieving users:', error);
+      console.error('Ocurrio un error al traer los usuarios:', error);
     }
   }
 
@@ -30,7 +30,7 @@ export class UserDAO {
       const { _id, name, email } = user;
       return { _id, name, email };
     } catch (error) {
-      console.error('Error occurred while retrieving a user by ID:', error);
+      console.error('Ocurrio un error al traer el usuario por su Id:', error);
     }
   }
 
@@ -42,7 +42,7 @@ export class UserDAO {
       const { _id, name, email } = user;
       return { _id, name, email };
     } catch (error) {
-      console.error('Error occurred while retrieving a user by email:', error);
+      console.error('Ocurrio un error al traer el usuario por el email:', error);
     }
   }
 
@@ -52,11 +52,16 @@ export class UserDAO {
       const result = await db.collection('users').updateOne({ email: email }, { $set: updatedUser });
       return result.modifiedCount;
     } catch (error) {
-      console.error('Error occurred while updating a user:', error);
+      console.error('Ocurrio un error al modificar el usuario:', error);
     }
   }
 }
 
-export default{
-  create, update, getUserByEmail, getUserById
-} 
+//Export de las funcioes como objeto
+export const UserDAOFunctions = {
+  create: UserDAO.create, 
+  update: UserDAO.update, 
+  getOne: UserDAO.getOne, 
+  getById: UserDAO.getById, 
+  getAll: UserDAO.getAll
+}
