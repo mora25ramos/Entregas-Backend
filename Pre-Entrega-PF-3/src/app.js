@@ -80,10 +80,10 @@ mongoose.connect(config.mongoDBUrl, {
     });
   })
   .catch((error) => {
-    console.error('Database connection error:', error);
+    console.error('Error al conectar a la base de datos:', error);
 });
 
 // Inicio del servidor
-server.listen(8080, () => {
-  console.log('Server listening on port 8080');
+server.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
