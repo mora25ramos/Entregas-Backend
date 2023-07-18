@@ -1,7 +1,7 @@
 import { getDB } from '../../db/db.js';
 import { getUserByIdService} from '../../services/userService.js';
 
-export class UserDAO {
+class UserDAO {
   static async create (user) {
     try {
       const db = getDB();
@@ -55,12 +55,23 @@ export class UserDAO {
       console.error('Ocurrio un error al modificar el usuario:', error);
     }
   }
+
+  static async delete(id) {
+    try{
+      const db = getDB();
+      const result = await db.collection('users').deleteOne({_id: id});
+      return result.deletedCount;
+    } catch (error) {
+      console.error ('Ocurrio un error al eliminar el usuario:', error);
+    }
+  }
 }
 
 //Export de las funcioes como objeto
 export const UserDAOFunctions = {
   create: UserDAO.create, 
   update: UserDAO.update, 
+  delete: UserDAO.delete,
   getOne: UserDAO.getOne, 
   getById: UserDAO.getById, 
   getAll: UserDAO.getAll

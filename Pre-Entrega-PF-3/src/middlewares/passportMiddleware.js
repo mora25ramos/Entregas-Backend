@@ -1,6 +1,6 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
-import JWTStrategy from 'passport-jwt';
+import {Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import bcrypt from 'bcrypt';
 import JWT_SECRET from '../config.js';
 import User from '../dao/models/User.js';
@@ -38,7 +38,7 @@ export default function configurePassport(app) {
     'jwt',
     new JWTStrategy(
       {
-        jwtFromRequest: (req) => req.cookies.jwt,
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         secretOrKey: JWT_SECRET,
       },
       async (jwtPayload, done) => {

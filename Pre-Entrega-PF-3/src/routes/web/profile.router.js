@@ -1,10 +1,10 @@
-import express from 'express';
-import authMiddleware from '../../middlewares/authMiddleware.js';
+import { Router } from 'express';
+import { authMiddleware } from '../../middlewares/authMiddleware.js';
 
-const router = express.Router();
+const profileRouter = Router();
 
 // Ruta para el perfil de usuario
-router.get('/profile', authMiddleware, (req, res) => {
+profileRouter.get('/profile', authMiddleware, (req, res) => {
   res.render('profile', { user: req.user });
 });
 

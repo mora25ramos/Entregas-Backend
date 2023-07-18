@@ -1,12 +1,11 @@
 import { Router } from 'express';
-import authMiddleware from '../../middlewares/authMiddleware.js';
-import adminMiddleware from '../../middlewares/authMiddleware.js';
+import { authMiddleware, adminMiddleware } from '../../middlewares/authMiddleware.js';
 import UserRepository from '../../repositories/UserRepository.js';
 
 const usersRouter = Router();
 
 // Obtener todos los usuarios (solo para administradores)
-usersRouter.get('/', authMiddleware, adminMiddleware('admin'), async (req, res) => {
+usersRouter.get('/', authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const users = await UserRepository.getAllUsers();
     res.json(users);
@@ -31,7 +30,7 @@ usersRouter.get('/:id', authMiddleware, async (req, res) => {
 });
 
 // Actualizar un usuario (solo para administradores)
-usersRouter.put('/:id', authMiddleware, adminMiddleware('admin'), async (req, res) => {
+usersRouter.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   const { id } = req.params;
   const userData = req.body;
   try {
@@ -47,7 +46,7 @@ usersRouter.put('/:id', authMiddleware, adminMiddleware('admin'), async (req, re
 });
 
 // Eliminar un usuario (solo para administradores)
-usersRouter.delete('/:id', authMiddleware, adminMiddleware('admin'), async (req, res) => {
+usersRouter.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   const { id } = req.params;
   try {
     const deletedUser = await UserRepository.deleteUser(id);

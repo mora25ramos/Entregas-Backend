@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import JWT_SECRET from '../config.js';
 
-const authMiddleware = (req, res, next) => {
+export const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
@@ -17,14 +17,9 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-const adminMiddleware = (req, res, next) => {
+export const adminMiddleware = (req, res, next) => {
   if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Access denied' });
+    return res.status(403).json({ message: 'Acceso denegado' });
   }
   next();
 };
-
-export default {
-  authMiddleware,
-  adminMiddleware
-}

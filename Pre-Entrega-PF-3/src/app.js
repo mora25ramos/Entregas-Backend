@@ -8,16 +8,17 @@ import mongoose from 'mongoose';
 import config from './config.js';
 
 // Importar middlewares
-import authMiddleware from './middlewares/authMiddleware.js'; 
+import { authMiddleware } from './middlewares/authMiddleware.js'; 
 import configurePassport from './middlewares/passportMiddleware.js';
 
 // Importar rutas
 import carritoRouter from './routes/api/carrito.router.js';
 import productsRouter from './routes/api/products.router.js';
-import userRouter from './routes/api/users.router.js';
+import usersRouter from './routes/api/users.router.js';
 import profileRouter from './routes/web/profile.router.js';
 import indexRouter from './routes/web/index.router.js';
-import loginRouter from './routes/web/login.router.js';
+import { loginRouter } from './routes/web/login.router.js';
+import { logoutRouter } from './routes/web/logout.router.js';
 import userService from './services/userService.js';
 import productService from './services/productService.js';
 import * as carritoService from './services/carritoService.js';
@@ -30,16 +31,11 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 8080;
 
-// Configuración de las variables de entorno
-config.load();
 
-// Configuración de handlebars como template engine
-app.engine('handlebars', handlebars({ defaultLayout: 'main' }));
+// Configuración de handlebars como templates
+app.engine('handlebars', handlebars.engine({ defaultLayout: false }));
 app.set('view engine', 'handlebars');
 app.set('views', './src/views');
-
-// Configuración de middlewares
-configureMiddlewares(app);
 
 // Configurar Passport
 const passport = configurePassport(app);
@@ -56,28 +52,29 @@ app.use('/products', productsRouter);
 app.use('/cart', carritoRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
-app.use('/users', authMiddleware, userRouter);
+app.use ('/logout', logoutRouter);
+app.use('/users', authMiddleware, usersRouter);
 app.use('/profile', profileRouter);
-app.use('/users', userService);
-app.use('/products', productService);
-app.use('/cart', carritoService);
 
 // Manejar errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  res.status(500).send('Algo salio mal!');
 });
 
 // Configuración de Web Sockets
-configureSockets(io);
+io.on('connection', (socket) => {
+  console.log('Un cliente se ha conectado');
+});
 
+//Conexion a Mongoose
 mongoose.connect(config.mongoDBUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
   })
   .then(() => {
-    console.log('Database connected');
+    console.log('Conectado a la base de datos');
     server.listen(PORT, () => {
       console.log(`Server listening on port ${PORT}`);
     });
@@ -87,6 +84,6 @@ mongoose.connect(config.mongoDBUrl, {
 });
 
 // Inicio del servidor
-httpServer.listen(config.port, () => {
-  console.log(`Server listening on port ${config.port}`);
+server.listen(8080, () => {
+  console.log('Server listening on port 8080');
 });

@@ -1,11 +1,18 @@
 import { Router } from 'express';
-import authMiddleware from '../../middlewares/authMiddleware.js';
-import adminMiddleware from '../../middlewares/authMiddleware.js';
+import { authMiddleware, adminMiddleware } from '../../middlewares/authMiddleware.js';
 import { CarritoManager } from '../../dao/fileSystem/CarritoManager.js';
 import UserDTO from '../../dto/UserDTO.js';
 import CartRepository from '../../repositories/CartRepository.js';
 
+
 const carritoRouter = Router();
+
+// Obtiene la información necesaria del usuario actual
+carritoRouter.get('/current', authMiddleware, adminMiddleware, (req, res) => {
+  const { username, email } = req.user;
+  const userDTO = new UserDTO(username, email);
+  res.json(userDTO);
+});
 
 // Obtiene el carrito de un usuario específico
 carritoRouter.get('/:username', authMiddleware, async (req, res) => {
@@ -42,13 +49,6 @@ carritoRouter.delete('/:username/:productId', authMiddleware, async (req, res) =
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
-});
-
-// Obtiene la información necesaria del usuario actual
-carritoRouter.get('/current', authMiddleware, adminMiddleware('user'), (req, res) => {
-  const { username, email } = req.user;
-  const userDTO = new UserDTO(username, email);
-  res.json(userDTO);
 });
 
 export default carritoRouter;

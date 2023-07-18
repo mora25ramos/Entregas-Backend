@@ -1,54 +1,54 @@
-import UserDAO from '../dao/mongoDB/user.mongo.js';
+import { UserDAOFunctions } from '../dao/mongoDB/user.mongo.js';
 import UserDTO from '../dto/UserDTO.js';
 
 class UserRepository {
-  async findById(userId) {
+  async getById(userId) {
     try {
-      const userData = await UserDAO.findById(userId);
+      const userData = await UserDAOFunctions.getById(userId);
       const user = UserDTO.fromData(userData);
       return user;
     } catch (error) {
-      throw new Error(`Error finding user with ID: ${userId}`);
+      throw new Error(`Ocurrio un error al buscar al usuario on id: ${userId}`);
     }
   }
 
-  async findByEmail(email) {
+  async getByEmail(email) {
     try {
-      const userData = await UserDAO.findByEmail(email);
+      const userData = await UserDAOFunctions.getOne(email);
       const user = UserDTO.fromData(userData);
       return user;
     } catch (error) {
-      throw new Error(`Error finding user with email: ${email}`);
+      throw new Error(`Ocurrio un error al buscar al usuario con email: ${email}`);
     }
   }
 
-  async createUser(userData) {
+  async create(userData) {
     try {
-      const newUser = await UserDAO.createUser(userData);
+      const newUser = await UserDAOFunctions.create(userData);
       const user = UserDTO.fromData(newUser);
       return user;
     } catch (error) {
-      throw new Error('Error creating user');
+      throw new Error('Error al crear nuevo usuario');
     }
   }
 
-  async updateUser(userId, userData) {
+  async update(userId, userData) {
     try {
-      const updatedUser = await UserDAO.updateUser(userId, userData);
+      const updatedUser = await UserDAOFunctions.update(userId, userData);
       const user = UserDTO.fromData(updatedUser);
       return user;
     } catch (error) {
-      throw new Error(`Error updating user with ID: ${userId}`);
+      throw new Error(`Error al actualizar el usuario con id: ${userId}`);
     }
   }
 
-  async deleteUser(userId) {
+  async delete(userId) {
     try {
-      const deletedUser = await UserDAO.deleteUser(userId);
+      const deletedUser = await UserDAOFunctions.delete(userId);
       const user = UserDTO.fromData(deletedUser);
       return user;
     } catch (error) {
-      throw new Error(`Error deleting user with ID: ${userId}`);
+      throw new Error(`Error al borrar al usuario con id: ${userId}`);
     }
   }
 }

@@ -1,19 +1,18 @@
-import UserDAO from '../mongoDB/user.mongo.js';
 import UserDTO from '../../dto/UserDTO.js';
 import UserRepository from '../../repositories/UserRepository.js';
 import bcrypt from 'bcrypt';
 
-export class UserManager {
-    async createUser(userData) {
+export default class UserManager {
+    async create(userData) {
         try {
             const newUser = await UserRepository.create(userData);
             return newUser;
         } catch (error) {
-            throw new Error('Error creating user');
+            throw new Error('Error al crear usuario');
         }
     }    
     
-    async getUserById(userId) {
+    async getById(userId) {
         try {
             const userData = await UserRepository.getById(userId);
             const user = UserDTO.fromData(userData);
@@ -23,9 +22,9 @@ export class UserManager {
         }
     }    
 
-    async getUserByEmail(email) {
+    async getByEmail(email) {
         try {
-            const userData = await UserRepository.getByEmail(email);
+            const userData = await UserRepository.getOne(email);
             const user = UserDTO.fromData(userData);
             return user;
         } catch (error) {
@@ -33,7 +32,7 @@ export class UserManager {
         }
     }    
 
-    async updateUser(userId, userData) {
+    async update(userId, userData) {
         try {
             const updatedUser = await UserRepository.update(userId, userData);
             return updatedUser;
@@ -42,9 +41,9 @@ export class UserManager {
         }
     }    
 
-    async deleteUser(userId) {
+    async delete(userId) {
         try {
-            const deletedUser = await UserRepository.delete(userId);
+            const deletedUser = await UserRepository.delet(userId);
             return deletedUser;
         } catch (error) {
             throw new Error(`Error deleting user with ID: ${userId}`);
@@ -62,10 +61,10 @@ export class UserManager {
 
     async login (email, password) {
         try {
-          const user = await this.getUserByEmail(email);
+          const user = await this.getByEmail(email);
     
           if (!user || !await this.comparePasswords(password, user.password)) {
-            throw new Error('Invalid email or password');
+            throw new Error('Email o contraseña incorrectos');
           }
     
           // Generar un token de acceso
@@ -77,7 +76,7 @@ export class UserManager {
     
           return user;
         } catch (error) {
-          throw new Error('Error during login');
+          throw new Error('Error en el login');
         }
     }
    
@@ -88,14 +87,9 @@ export class UserManager {
     
           // se elimina la cookie de acceso
           res.clearCookie('access_token');
-          return 'Logged out successfully';
+          return 'Sesion cerrada con exito';
         } catch (error) {
-          throw new Error('Error during logout');
+          throw new Error('Hubo un error durante el cierre de la sesion');
         }
       }    
-}
-
-export default {
-    login,
-    logout
-}
+};
