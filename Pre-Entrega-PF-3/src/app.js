@@ -19,9 +19,11 @@ import profileRouter from './routes/web/profile.router.js';
 import indexRouter from './routes/web/index.router.js';
 import { loginRouter } from './routes/web/login.router.js';
 import { logoutRouter } from './routes/web/logout.router.js';
-import userService from './services/userService.js';
-import productService from './services/productService.js';
+
+// Importar servicios
+import { createProductService, getProductsService, getProductByIdService, updateProductService, deleteProductService } from './services/productService.js';
 import * as carritoService from './services/carritoService.js';
+import * as userService from './services/userService.js';
 
 dotenv.config();
 
@@ -31,7 +33,6 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 8080;
 
-
 // Configuración de handlebars como templates
 app.engine('handlebars', handlebars.engine({ defaultLayout: false }));
 app.set('view engine', 'handlebars');
@@ -40,19 +41,13 @@ app.set('views', './src/views');
 // Configurar Passport
 const passport = configurePassport(app);
 
-// Factory para seleccionar el DAO
-let daoOption = process.argv.find((arg) => arg.includes('--dao='));
-if (daoOption) {
-  daoOption = daoOption.split('=')[1];
-}
-
 // Configuración de rutas
 app.use('/', indexRouter);
 app.use('/products', productsRouter);
 app.use('/cart', carritoRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
-app.use ('/logout', logoutRouter);
+app.use('/logout', logoutRouter);
 app.use('/users', authMiddleware, usersRouter);
 app.use('/profile', profileRouter);
 
@@ -67,20 +62,19 @@ io.on('connection', (socket) => {
   console.log('Un cliente se ha conectado');
 });
 
-//Conexion a Mongoose
+// Conexion a Mongoose
 mongoose.connect(config.mongoDBUrl, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  })
-  .then(() => {
-    console.log('Conectado a la base de datos');
-    server.listen(PORT, () => {
-      console.log(`Server listening on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Error al conectar a la base de datos:', error);
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log('Conectado a la base de datos');
+  server.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
+})
+.catch((error) => {
+  console.error('Error al conectar a la base de datos:', error);
 });
 
 // Inicio del servidor

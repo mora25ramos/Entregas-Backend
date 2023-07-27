@@ -1,13 +1,12 @@
 export class ProductoDTO {
-    constructor(id, nombre, precio, cantidad, total) {
-      this.id = id;
-      this.nombre = nombre;
-      this.precio = precio;
-      this.cantidad = cantidad;
-      this.total = total;
-    }
-  
-    static fromModel(producto) {
-      return new ProductoDTO(producto.id, producto.nombre, producto.precio, producto.cantidad, producto.total);
-    }
-}  
+  constructor(id, nombre, precio, stock) {
+    this.id = id;
+    this.nombre = nombre;
+    this.precio = precio;
+    this.stock = stock;
+  }
+
+  static fromModel(producto) {
+    return new ProductoDTO(producto._id, producto.nombre, producto.precio, producto.stock);
+  }
+}

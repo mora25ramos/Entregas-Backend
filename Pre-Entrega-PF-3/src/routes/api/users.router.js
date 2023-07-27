@@ -1,14 +1,19 @@
 import { Router } from 'express';
 import { authMiddleware, adminMiddleware } from '../../middlewares/authMiddleware.js';
-import UserRepository from '../../repositories/UserRepository.js';
+import {
+  createUserController,
+  getUserByIdController,
+  updateUserController,
+  deleteUserController,
+  sendEmailToAdmin,
+} from '../../controllers/users.controller.js';
 
 const usersRouter = Router();
 
 // Obtener todos los usuarios (solo para administradores)
 usersRouter.get('/', authMiddleware, adminMiddleware, async (req, res) => {
   try {
-    const users = await UserRepository.getAllUsers();
-    res.json(users);
+    // Implementar el método para obtener todos los usuarios si es necesario
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
@@ -18,10 +23,7 @@ usersRouter.get('/', authMiddleware, adminMiddleware, async (req, res) => {
 // Obtener un usuario por su ID
 usersRouter.get('/:id', authMiddleware, async (req, res) => {
   try {
-    const user = await UserRepository.getUserById(req.params.id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    const user = await getUserByIdController(req.params.id);
     res.json(user);
   } catch (error) {
     console.error(error);
@@ -34,11 +36,10 @@ usersRouter.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   const { id } = req.params;
   const userData = req.body;
   try {
-    const updatedUser = await UserRepository.updateUser(id, userData);
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    const updatedUser = await updateUserController(id, userData);
     res.json(updatedUser);
+    // Notificar al administrador sobre la actualización del usuario
+    sendEmailToAdmin('admin@correo.com', 'actualizado', id);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
@@ -49,11 +50,10 @@ usersRouter.put('/:id', authMiddleware, adminMiddleware, async (req, res) => {
 usersRouter.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedUser = await UserRepository.deleteUser(id);
-    if (!deletedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    const deletedUser = await deleteUserController(id);
     res.json(deletedUser);
+    // Notificar al administrador sobre la eliminación del usuario
+    sendEmailToAdmin('admin@correo.com', 'eliminado', id);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });

@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import ProductRepository from '../repositories/ProductRepository.js';
 
 const { Schema } = mongoose;
 
@@ -25,8 +24,9 @@ const productSchema = new Schema(
   { timestamps: true }
 );
 
+// Agregamos un método estático para obtener el stock disponible de un producto por su ID
 productSchema.statics.getAvailableStock = async function (productId) {
-  const product = await ProductRepository.getById(productId);
+  const product = await this.findById(productId);
   return product ? product.stock : 0;
 };
 

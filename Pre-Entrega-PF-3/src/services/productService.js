@@ -1,33 +1,31 @@
-import ProductDAO from '../dao/mongoDB/product.mongo.js';
+import {
+  createProduct as createProductController,
+  getAllProducts,
+  getProductById,
+  updateProduct as updateProductController,
+  deleteProduct,
+} from '../controllers/products.controller.js';
 
-export const createProduct = async (productData) => {
-  const newProduct = await ProductDAO.create(productData);
+export const createProductService = async (productData) => {
+  const newProduct = await createProductController(productData);
   return newProduct;
 };
 
-export const getProducts = async () => {
-  const products = await ProductDAO.getAll();
+export const getProductsService = async () => {
+  const products = await getAllProducts();
   return products;
 };
 
-export const getProductById = async (productId) => {
-  const product = await ProductDAO.getProductById(productId);
+export const getProductByIdService = async (productId) => {
+  const product = await getProductById(productId);
   return product;
 };
 
-export const updateProduct = async (productId, productData) => {
-  const updatedProduct = await ProductDAO.updateProduct(productId, productData);
+export const updateProductService = async (productId, productData) => {
+  const updatedProduct = await updateProductController(productId, productData);
   return updatedProduct;
 };
 
-export const deleteProduct = async (productId) => {
-  await ProductDAO.deleteProduct(productId);
-};
-
-export default {
-  createProduct,
-  getProducts,
-  getProductById,
-  updateProduct,
-  deleteProduct
+export const deleteProductService = async (productId) => {
+  await deleteProduct(productId);
 };

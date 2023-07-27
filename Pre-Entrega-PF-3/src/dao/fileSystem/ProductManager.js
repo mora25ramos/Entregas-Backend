@@ -1,11 +1,13 @@
-import ProductRepository from '../../repositories/ProductRepository.js';
+// Importar las funciones del controlador
+import { createProduct, getAllProducts, getProductById, updateProduct, deleteProduct } from '../../controllers/products.controller.js';
 import { ProductoDTO } from '../../dto/productDTO.js';
 
 class ProductManager {
+  // Métodos para obtener, agregar, actualizar y eliminar productos utilizando las funciones del controlador
   async getAllProducts() {
     try {
-      const productsData = await ProductRepository.getAll();
-      const products = productsData.map((productData) => ProductoDTO.fromData(productData));
+      const productsData = await getAllProducts();
+      const products = productsData.map((productData) => ProductoDTO.fromModel(productData));
       return products;
     } catch (error) {
       throw new Error('Error getting all products');
@@ -14,8 +16,8 @@ class ProductManager {
 
   async getProductById(productId) {
     try {
-      const productData = await ProductRepository.getById(productId);
-      const product = ProductoDTO.fromData(productData);
+      const productData = await getProductById(productId);
+      const product = ProductoDTO.fromModel(productData);
       return product;
     } catch (error) {
       throw new Error(`Error getting product with ID: ${productId}`);
@@ -24,8 +26,8 @@ class ProductManager {
 
   async addProduct(productData) {
     try {
-      const newProductData = await ProductRepository.create(productData);
-      const newProduct = ProductoDTO.fromData(newProductData);
+      const newProductData = await createProduct(productData);
+      const newProduct = ProductoDTO.fromModel(newProductData);
       return newProduct;
     } catch (error) {
       throw new Error('Error adding product');
@@ -34,8 +36,8 @@ class ProductManager {
 
   async updateProduct(productId, productData) {
     try {
-      const updatedProductData = await ProductRepository.update(productId, productData);
-      const updatedProduct = ProductoDTO.fromData(updatedProductData);
+      const updatedProductData = await updateProduct(productId, productData);
+      const updatedProduct = ProductoDTO.fromModel(updatedProductData);
       return updatedProduct;
     } catch (error) {
       throw new Error(`Error updating product with ID: ${productId}`);
@@ -44,8 +46,8 @@ class ProductManager {
 
   async deleteProduct(productId) {
     try {
-      const deletedProductData = await ProductRepository.delete(productId);
-      const deletedProduct = ProductoDTO.fromData(deletedProductData);
+      const deletedProductData = await deleteProduct(productId);
+      const deletedProduct = ProductoDTO.fromModel(deletedProductData);
       return deletedProduct;
     } catch (error) {
       throw new Error(`Error deleting product with ID: ${productId}`);

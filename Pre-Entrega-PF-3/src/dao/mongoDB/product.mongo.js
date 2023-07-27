@@ -1,8 +1,8 @@
 import { getDB } from '../../db/db.js';
 
-class ProductDAO {
-  constructor(db) {
-    this.db = db;
+export default class ProductDAO {
+  constructor() {
+    this.db = getDB();
     this.collection = 'products';
   }
 
@@ -16,9 +16,9 @@ class ProductDAO {
     }
   }
 
-  async getProductById(id) {
+  async getById(id) {
     try {
-      const product = await this.db.collection(this.collection).findOne({ id });
+      const product = await this.db.collection(this.collection).findOne({ _id: id });
       return product;
     } catch (error) {
       console.error(`Error occurred while retrieving product with ID ${id}:`, error);
@@ -26,33 +26,33 @@ class ProductDAO {
     }
   }
 
-  async addProduct(productData) {
+  async create(productData) {
     try {
       const result = await this.db.collection(this.collection).insertOne(productData);
-      return { id: result.insertedId, ...productData };
+      return result.insertedId ? { _id: result.insertedId, ...productData } : null;
     } catch (error) {
       console.error('Error occurred while adding product:', error);
       throw error;
     }
   }
 
-  async updateProduct(id, productData) {
+  async update(id, productData) {
     try {
-      await this.db.collection(this.collection).updateOne({ id }, { $set: productData });
-      return { id, ...productData };
+      await this.db.collection(this.collection).updateOne({ _id: id }, { $set: productData });
+      return { _id: id, ...productData };
     } catch (error) {
       console.error(`Error occurred while updating product with ID ${id}:`, error);
       throw error;
     }
   }
 
-  async deleteProduct(id) {
+  async delete(id) {
     try {
-      const product = await this.getProductById(id);
+      const product = await this.getById(id);
       if (!product) {
         return null;
       }
-      await this.db.collection(this.collection).deleteOne({ id });
+      await this.db.collection(this.collection).deleteOne({ _id: id });
       return product;
     } catch (error) {
       console.error(`Error occurred while deleting product with ID ${id}:`, error);
@@ -60,5 +60,3 @@ class ProductDAO {
     }
   }
 }
-
-export default ProductDAO;

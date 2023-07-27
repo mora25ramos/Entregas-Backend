@@ -6,7 +6,7 @@ class CartRepository {
       const cart = await CarritoDAO.getById(cartId);
       return cart;
     } catch (error) {
-      throw new Error(`Error getting cart with ID: ${cartId}`);
+      throw new Error(`Error al buscar carrito con id: ${cartId}`);
     }
   }
 
@@ -15,7 +15,7 @@ class CartRepository {
       const newCart = await CarritoDAO.create(cartData);
       return newCart;
     } catch (error) {
-      throw new Error('Error creating cart');
+      throw new Error('Error creando carrito');
     }
   }
 
@@ -24,7 +24,7 @@ class CartRepository {
       const updatedCart = await CarritoDAO.update(cartId, cartData);
       return updatedCart;
     } catch (error) {
-      throw new Error(`Error updating cart with ID: ${cartId}`);
+      throw new Error(`Error actualizando carrito con id: ${cartId}`);
     }
   }
 
@@ -33,7 +33,7 @@ class CartRepository {
       const deletedCart = await CarritoDAO.delete(cartId);
       return deletedCart;
     } catch (error) {
-      throw new Error(`Error deleting cart with ID: ${cartId}`);
+      throw new Error(`Error eliminando carrito con id: ${cartId}`);
     }
   }
 }

@@ -2,6 +2,7 @@ import { getDB } from '../../db/db.js';
 import { getUserByIdService} from '../../services/userService.js';
 
 class UserDAO {
+  //Crear un nuevo usuario
   static async create (user) {
     try {
       const db = getDB();
@@ -12,6 +13,7 @@ class UserDAO {
     }
   }
 
+  //Traer todos los usuarios existentes
   static async getAll() {
     try {
       const db = getDB();
@@ -22,6 +24,7 @@ class UserDAO {
     }
   }
 
+  //Traer un usuario especìfico
   static async getById(id) {
     try {
       const db = getDB();
@@ -34,6 +37,7 @@ class UserDAO {
     }
   }
 
+  //Traer un usuario especìfico por email
   static async getOne(email) {
     try {
       const db = getDB();
@@ -46,6 +50,7 @@ class UserDAO {
     }
   }
 
+  //Actualizar o modificar un usuario
   static async update(email, updatedUser) {
     try {
       const db = getDB();
@@ -56,6 +61,7 @@ class UserDAO {
     }
   }
 
+  //Eliminar u usuario
   static async delete(id) {
     try{
       const db = getDB();

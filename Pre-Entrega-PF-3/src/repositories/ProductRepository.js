@@ -35,4 +35,4 @@ export default class ProductRepository {
     const product = await Product.findByIdAndDelete(id);
     return product;
   }
-}
+};
